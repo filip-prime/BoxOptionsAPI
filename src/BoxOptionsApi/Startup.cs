@@ -53,7 +53,7 @@ namespace BoxOptionsApi
             var logAggregate = new LogAggregate().AddLogger(new LogToConsole());
             var log = logAggregate.CreateLogger();
 
-            var appSettings = Environment.IsEnvironment("Development") ? Configuration.Get<ApplicationSettings>() : LoadSettings(Configuration.GetValue<string>("BROKER_SETTINGS_URL"), log);
+            var appSettings = Environment.IsEnvironment("Development") ? Configuration.Get<ApplicationSettings>() : LoadSettings(Configuration.GetValue<string>("SETTINGS_URL"), log);
             
             if (!ApplicationSettings.IsSettingsValid(appSettings, log, Program.Name))
             {
