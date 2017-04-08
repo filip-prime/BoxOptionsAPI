@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Swashbuckle.Swagger.Model;
 
 namespace BoxOptionsApi
 {
@@ -50,6 +51,16 @@ namespace BoxOptionsApi
                 o.Filters.Add(new HandleAllExceptionsFilterFactory());
             });
 
+            services.AddSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "Api"
+                });
+                options.DescribeAllEnumsAsStrings();
+            });
+
             var logAggregate = new LogAggregate().AddLogger(new LogToConsole());
             var log = logAggregate.CreateLogger();
 
@@ -76,6 +87,9 @@ namespace BoxOptionsApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUi("swagger");
         }
 
         private static ApplicationSettings LoadSettings(string url, ILog log)
