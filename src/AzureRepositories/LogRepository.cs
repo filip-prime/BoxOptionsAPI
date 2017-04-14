@@ -24,7 +24,7 @@ namespace AzureRepositories
         public async Task<IEnumerable<LogEntity>> GetRange(DateTime dateFrom, DateTime dateTo, string clientId)
         {
             var entities = (await _storage.GetDataAsync(new[] { clientId }, int.MaxValue,
-                entity => entity.Timestamp >= dateFrom && entity.Timestamp <= dateTo))
+                entity => entity.Timestamp >= dateFrom && entity.Timestamp < dateTo))
                 .OrderByDescending(item => item.Timestamp);
 
             return entities;

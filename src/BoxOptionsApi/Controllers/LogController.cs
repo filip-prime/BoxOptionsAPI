@@ -41,7 +41,8 @@ namespace BoxOptionsApi.Controllers
         public async Task<LogDto[]> Get([FromQuery] string dateFrom, [FromQuery] string dateTo,
             [FromQuery] string clientId)
         {
-            var entities = await _logRepository.GetRange(DateTime.Parse(dateFrom), DateTime.Parse(dateTo), clientId);
+            const string format = "yyyyMMdd";
+            var entities = await _logRepository.GetRange(DateTime.ParseExact(dateFrom, format, CultureInfo.InvariantCulture), DateTime.ParseExact(dateTo, format, CultureInfo.InvariantCulture).AddDays(1), clientId);
             return entities.Select(e => new LogDto()
             {
                 ClientId = e.ClientId,
