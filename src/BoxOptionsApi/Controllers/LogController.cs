@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using AzureRepositories;
 using BoxOptionsApi.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +35,20 @@ namespace BoxOptionsApi.Controllers
             });
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<LogDto[]> Get([FromQuery] string dateFrom, [FromQuery] string dateTo,
+            [FromQuery] string clientId)
+        {
+            var entities = await _logRepository.GetRange(DateTime.Parse(dateFrom), DateTime.Parse(dateTo), clientId);
+            return entities.Select(e => new LogDto()
+            {
+                ClientId = e.ClientId,
+                EventCode = e.EventCode,
+                Message = e.Message,
+                Timestamp = e.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+            }).ToArray();
         }
     }
 }
